@@ -1,0 +1,12 @@
+{
+  "name": "visual_maze",
+  "version": "0.0.0",
+  "main": "main.mjs",
+  "scripts": {
+    "start": "node main.mjs"
+  },
+  "author": "Che Kambouris",
+  "license": "",
+  "description": "",
+  "devDependencies": {}
+}
