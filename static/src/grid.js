@@ -13,7 +13,7 @@ export class Grid {
 
   #graph = new Graph();
 
-  constructor(canvas, size, graph, defaultStyle) {
+  constructor(canvas, size, {graph = new Graph(), defaultStyle = {}}={}) {
     this.#canvas = canvas;
     this.#ctx = canvas.getContext("2d");
     this.#squareSize = Math.min(
