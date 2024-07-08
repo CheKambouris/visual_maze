@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Visual Maze</title>
 </head>
 <body>
-  <canvas id="canvas" width="500" height="500"
+  <header class="flex flex-row justify-center px-24 py-4 bg-blue-500">
+    <h1 class="text-3xl font-serif font-extrabold underline decoration-blue-300 text-white">Visual Maze</h1>
+    <div class="flex-1"></div>
+  </header>
+  <canvas id="canvas" width="500" height="500" class="p-4"
     style="image-rendering: pixelated; image-rendering: crisp-edges; image-rendering: -moz-crisp-edges; image-rendering: -webkit-crisp-edges;">
   </canvas>
+  <div id="animation-controls" class="flex flex-row space-x-4 px-4">
+    <select name="algorithm-selector" id="algorithm-selector" 
+      class="p-1 border-4 rounded border-blue-500 bg-blue-300 hover:bg-blue-500">
+      <option value="random-generate">Random Walls</option>
+    </select>
+    <button 
+      id="play-pause"
+      class="p-1 border-4 rounded border-blue-500 bg-blue-300 hover:bg-blue-500">
+      Play/Pause
+    </button>
+    <button 
+      class="p-1 border-4 rounded border-gray-300 bg-gray-200 text-gray-400 cursor-not-allowed">
+      Prev step
+    </button>
+    <button 
+      class="p-1 border-4 rounded border-gray-300 bg-gray-200 text-gray-400 cursor-not-allowed">
+      Next step
+    </button>
+  </div>
   <script type="module" src="index.js"></script>
 </body>
 </html>
