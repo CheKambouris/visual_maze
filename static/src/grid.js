@@ -98,4 +98,10 @@ export class Grid {
   styleVertex(vertex, style) {
     throw new Error("Not implemented yet. ")
   }
+  reset() {
+    for (const edge of this.#graph.edges) {
+      this.#graph.removeEdge(edge);
+    }
+    this.#redraw();
+  }
 }
