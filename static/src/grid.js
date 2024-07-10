@@ -76,7 +76,12 @@ export class Grid {
   }
 
   getVertex(vertex) { return this.#graph.getVertex(vertex); }
-  
+
+  hasVertex(vertex) {
+    return (
+      vertex.x >= 0 && vertex.x < this.#size.x &&
+      vertex.y >= 0 && vertex.y < this.#size.y)
+  }
   addWall(edge) {
     this.#graph.addEdge(edge);
     this.#redraw();

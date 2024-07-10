@@ -32,12 +32,18 @@ export default class Graph {
   #hashVertex({x, y}) { return x + y * this.#size.x; }
 
   getVertex(vertex) {
-    return this.#vertices.get(this.#hashVertex(vertex));
+    return this.hasVertex(vertex) ?
+      this.#vertices.get(this.#hashVertex(vertex)):
+      undefined;
+  }
+  hasVertex(vertex) {
+    return vertex.x >= 0 && vertex.x < this.#size.x && vertex.y >= 0 && vertex.y < this.#size.y;
   }
   adjacent({from, to}) {
     from = this.getVertex(from);
     to = this.getVertex(to);
-    from.neighbours.has(to);
+    
+    return from.neighbours.has(to);
   }
   neighbours(vertex) {
     vertex = this.getVertex(vertex);
@@ -47,14 +53,18 @@ export default class Graph {
     from = this.getVertex(from);
     to = this.getVertex(to);
 
-    from.neighbours.add(to);
-    to.neighbours.add(from);
+    if (from && to) {
+      from.neighbours.add(to);
+      to.neighbours.add(from);
+    }
   }
   removeEdge({ from, to }) {
     from = this.getVertex(from);
     to = this.getVertex(to);
 
-    from.neighbours.delete(to);
-    to.neighbours.delete(from);
+    if (from && to) {
+      from.neighbours.delete(to);
+      to.neighbours.delete(from);
+    }
   }
 }
