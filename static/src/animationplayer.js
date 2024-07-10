@@ -24,6 +24,7 @@ export class AnimationPlayer {
   });
   static operations = Object.freeze({
     ADDWALL: Symbol("ADDWALL"),
+    REMOVEWALL: Symbol("REMOVEWALL"),
   });
 
   constructor(grid, {actionList = [], interval = 200, onFinish = ()=>{}}={}) {
@@ -37,8 +38,11 @@ export class AnimationPlayer {
       case AnimationPlayer.operations.ADDWALL:
         this.#grid.addWall(...action.args);
         break;
+      case AnimationPlayer.operations.REMOVEWALL:
+        this.#grid.removeWall(...action.args);
+        break;
       default:
-        console.error(`Unsupported action ${action.operation}`);
+        console.error(`Unsupported action ${action.operation.toString()}`);
         break;
     }
   }
