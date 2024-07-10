@@ -11,9 +11,9 @@ export class Grid {
   #size
   #squareSize
 
-  #graph = new Graph();
+  #graph;
 
-  constructor(canvas, size, {graph = new Graph(), defaultStyle = {}}={}) {
+  constructor(canvas, size, defaultStyle = {}) {
     this.#canvas = canvas;
     this.#ctx = canvas.getContext("2d");
     this.#squareSize = Math.min(
@@ -21,11 +21,7 @@ export class Grid {
       (this.#canvas.height - this.#ctx.lineWidth) / size.y
     );
     this.#size = size;
-    for (let x = 0; x < size.x; x++) {
-      for (let y = 0; y < size.y; y++) {
-        this.#graph.addVertex({ x: x, y: y });
-      }
-    }
+    this.#graph = new Graph(this.#size);
     this.#redraw();
   }
   
@@ -79,10 +75,7 @@ export class Grid {
     return this.#graph.vertices;
   }
 
-  getVertex({x, y}) {
-    // TODO: Optimise this to get constant time access to the reference of the vertex. 
-    return Array(...this.vertices).find((v) => v.x == x && v.y == y);
-  }
+  getVertex(vertex) { return this.#graph.getVertex(vertex); }
   
   addWall(edge) {
     this.#graph.addEdge(edge);
@@ -96,7 +89,7 @@ export class Grid {
     throw new Error("Not implemented yet. ")
   }
   styleVertex(vertex, style) {
-    throw new Error("Not implemented yet. ")
+    this.#graph.getVertex(vertex).style = style;
   }
   reset() {
     for (const edge of this.#graph.edges) {

@@ -1,59 +1,60 @@
 export default class Graph {
-  /** @type {Map<Vertex, Set<Vertex>>} */
-  #adjList = new Map();
+  /** @type {Map<Number, Vertex>} */
+  #vertices = new Map();
+  #size;
+
+  constructor(size) {
+    this.#size = size;
+    for (let y = 0; y < size.y; y++) {
+      for (let x = 0; x < size.x; x++) {
+        const vertex = { x: x, y: y, neighbours: new Set() };
+        this.#vertices.set(this.#hashVertex(vertex), vertex);
+      }
+    }
+  }
 
   get vertices() {
-    return this.#adjList.keys();
+    return this.#vertices.values();
   }
   get edges() {
-    return this.#get_edges();
-  }
-
-  *#get_edges() {
-    for (const [vertex, neighbours] of this.#adjList) {
-      for (const neighbour of neighbours) {
-        yield { from: vertex, to: neighbour };
+    const edges = [];
+    const visited = new Set();
+    for (const vertex of this.#vertices.values()) {
+      for (const neighbour of vertex.neighbours) {
+        if (visited.has(neighbour)) continue;
+        edges.push({from: vertex, to: neighbour});
       }
+      visited.add(vertex);
     }
+    return edges;
   }
 
+  #hashVertex({x, y}) { return x + y * this.#size.x; }
+
+  getVertex(vertex) {
+    return this.#vertices.get(this.#hashVertex(vertex));
+  }
   adjacent({from, to}) {
-    return this.#adjList.get(from)?.has(to) ?? false;
+    from = this.getVertex(from);
+    to = this.getVertex(to);
+    from.neighbours.has(to);
   }
   neighbours(vertex) {
-    return this.#adjList.get(vertex);
-  }
-  addVertex(vertex) {
-    const neighbours = this.neighbours(vertex);
-    if(neighbours == undefined) {
-      this.#adjList.set(vertex, new Set());
-    } else {
-      for (const neighbour of neighbours) {
-        this.removeEdge({from: vertex, to: neighbour});
-      }
-    }
-  }
-  removeVertex(vertex) {
-    const neighbours = this.neighbours(vertex);
-    if (neighbours) {
-      for (const neighbour of neighbours) {
-        this.removeEdge({ from: vertex, to: neighbour });
-      }
-    }
-    this.#adjList.delete(vertex);
+    vertex = this.getVertex(vertex);
+    return vertex.neighbours;
   }
   addEdge({from, to}) {
-    const edgesFrom = this.#adjList.get(from);
-    const edgesTo = this.#adjList.get(to);
-    if (edgesFrom && edgesTo) {
-      edgesFrom.add(to);
-      edgesTo.add(from);
-    }
+    from = this.getVertex(from);
+    to = this.getVertex(to);
+
+    from.neighbours.add(to);
+    to.neighbours.add(from);
   }
-  removeEdge({from, to}) {
-    const edgesFrom = this.#adjList.get(from);
-    edgesFrom?.delete(to);
-    const edgesTo = this.#adjList.get(to);
-    edgesTo?.delete(from);
+  removeEdge({ from, to }) {
+    from = this.getVertex(from);
+    to = this.getVertex(to);
+
+    from.neighbours.delete(to);
+    to.neighbours.delete(from);
   }
 }
