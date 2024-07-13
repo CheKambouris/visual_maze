@@ -3,6 +3,7 @@
 import * as fs from "node:fs";
 import * as http from "node:http";
 import * as path from "node:path";
+import { URL } from "node:url";
 
 const PORT = 8000;
 
@@ -15,21 +16,20 @@ const MIME_TYPES = {
   jpg: "image/jpg",
   gif: "image/gif",
   ico: "image/x-icon",
-  svg: "image/svg+xml",
+  svg: "image/svg+xml", 
 };
-
-const STATIC_PATH = path.join(process.cwd(), "./static");
 
 const toBool = [() => true, () => false];
 
 const prepareFile = async (url) => {
-  const paths = [STATIC_PATH, url];
-  if (url.endsWith("/")) paths.push("index.html");
-  const filePath = path.join(...paths);
-  const pathTraversal = !filePath.startsWith(STATIC_PATH);
+  const filePath = path.join(
+    process.cwd(),
+    url == '/' ? "index.html" : url
+  );
+  const pathTraversal = !filePath.startsWith(process.cwd());
   const exists = await fs.promises.access(filePath).then(...toBool);
   const found = !pathTraversal && exists;
-  const streamPath = found ? filePath : STATIC_PATH + "/404.html";
+  const streamPath = found ? filePath : path.join(process.cwd(), "/404.html");
   const ext = path.extname(streamPath).substring(1).toLowerCase();
   const stream = fs.createReadStream(streamPath);
   return { found, ext, stream };
