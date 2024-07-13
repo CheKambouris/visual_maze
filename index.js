@@ -41,6 +41,18 @@ function main() {
     }
   };
 
+  const nextstep = document.getElementById("next-step");
+  if (!nextstep) {
+    return;
+  }
+  nextstep.onclick = (ev) => player.nextStep();
+
+  const prevstep = document.getElementById("previous-step");
+  if (!prevstep) {
+    return;
+  }
+  prevstep.onclick = (ev) => player.previousStep();
+
   const algorithmSelector = document.getElementById("algorithm-selector");
   if (!algorithmSelector) {
     return;
